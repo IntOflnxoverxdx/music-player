@@ -37,9 +37,16 @@ function update(time){
     if (seconds.length < 2){
         seconds = "0"+seconds
     }
+    if (soundPlayer.paused){
+        document.querySelector(".pause").classList.add("paused")
+    }else{
+        document.querySelector(".pause").classList.remove("paused")
+
+    }
     document.querySelector(".now-time").innerHTML = `${minutes}:${seconds}`
     document.querySelector(".progress").style.width = `${time/songs[currentSong].length*100}%`
     document.querySelector(".circle").style.left = `${time/songs[currentSong].length*100}%`
+    checkEnded()
 }
 
 
@@ -191,7 +198,6 @@ function previousControls(){
 
 setInterval(() => {
     update(soundPlayer.currentTime)
-    checkEnded()
 }, 1000);
 
 
