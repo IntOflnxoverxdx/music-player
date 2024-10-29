@@ -15,28 +15,31 @@ body{
 
 body,html{
     display: flex;
-    align-items: center;
     overflow: hidden;
     justify-content: center;
+    align-items: center;
     height: 100%;
 }
 .player-wrapper{
     overflow: hidden;
     width: 500px;
-    min-height: 700px;
-    max-height: 900px;
+    height: 673px;
+    max-height: calc(100% - 40px);
 }
 .top{
+    width: 100%;
+    max-height: calc(100% - 173px);
+    aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60%;
+    position: relative;
 }
 
 .album-covers{
-    width: 100%;
-    padding: 20px;
     aspect-ratio: 1;
+    height: 100%;
+    padding: 20px;
     position: relative;
     overflow: hidden;
 }
@@ -50,8 +53,11 @@ body,html{
 }
 
 .bottom{
+    height: 173px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    padding: 20px;
 }
 .controls{
     position: absolute;
@@ -166,6 +172,7 @@ body,html{
 }
 
 .rofl{
+    z-index: 20;
     top: 10px;
     left: 10px;
     width: fit-content;
@@ -226,7 +233,7 @@ body,html{
   }
 
 
-@media screen and (max-width:500px) {
+@media screen and (max-width:580px) {
     .rofl{
         top: auto;
         height: fit-content;
@@ -239,9 +246,6 @@ body,html{
     .rofl p{
         margin-bottom: 0;
         margin-right: 10px;
-    }
-    .top{
-        height: 40%;
     }
     .song-controls{
         width: 70%;

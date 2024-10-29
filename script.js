@@ -1,7 +1,5 @@
 rofl = false
 
-
-
 songs.forEach(song => {
     document.querySelector(".album-covers").innerHTML += `
     <img src="${song.cover}" alt="">
@@ -79,14 +77,14 @@ function nextSong(autoplay = false){
     }
     soundPlayer.pause()
 }
-function previousSong(){
+function previousSong(autoplay = false){
     if (currentSong == 0){
         currentSong = songs.length-1;
     } 
     else{
         currentSong -= 1
     }
-    if (!soundPlayer.paused){
+    if (!soundPlayer.paused || autoplay){
         setSong(true)
     }else{
         setSong()
@@ -176,7 +174,7 @@ function previousControls(){
 
 setInterval(() => {
     update(soundPlayer.currentTime)
-}, 1000);
+}, 16);
 
 
 
@@ -210,7 +208,7 @@ function setButtons(){
     timeline.addEventListener("click",(event)=>{
         time = Math.floor(event.offsetX/timeline.offsetWidth*songs[currentSong].length)
         soundPlayer.currentTime = time
-        update(time)
+        update(soundPlayer.currentTime)
     
         
     })
@@ -236,5 +234,34 @@ document.querySelector(".rofl").onclick = ()=>{
 }
 
 
+can_switch = true
+document.querySelector("body").addEventListener("keypress",(event)=>{
+    if (can_switch){
+        if (event.key == " " || event.key == "k"){
+            if (soundPlayer.paused){
+                soundPlayer.play()
+            }else{
+                soundPlayer.pause() 
+            }
+            update(soundPlayer.currentTime)
+        }
+        else if (event.key == "l"){
+            can_switch = false
+            setTimeout(() => {
+                can_switch = true
+            }, 300);
+            soundPlayer.pause()
+            nextSong(true)
+        }
+        else if (event.key == "j"){
+            can_switch = false
+            setTimeout(() => {
+                can_switch = true
+            }, 300);
+            soundPlayer.pause()
+            previousSong(true)
+        }
+    }
+})
 
 setButtons()
