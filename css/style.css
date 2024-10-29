@@ -227,6 +227,11 @@ body,html{
 
 @media screen and (max-width:500px) {
     .rofl{
+        top: auto;
+        height: fit-content;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
         flex-direction: row-reverse;
         align-items: center;
     }
