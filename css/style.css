@@ -20,8 +20,10 @@ body,html{
     height: 100%;
 }
 .player-wrapper{
+    overflow: hidden;
     width: 500px;
-    height: 90%;
+    min-height: 700px;
+    max-height: 900px;
 }
 .top{
     display: flex;
@@ -31,11 +33,9 @@ body,html{
 }
 
 .album-covers{
-    height: 100%;
-    aspect-ratio: 1;
-    align-items: center;
-    display: flex;
+    width: 100%;
     padding: 20px;
+    aspect-ratio: 1;
     position: relative;
     overflow: hidden;
 }
@@ -49,8 +49,6 @@ body,html{
 }
 
 .bottom{
-    overflow: hidden;
-    height: 40%;
     position: relative;
     padding: 20px;
 }
