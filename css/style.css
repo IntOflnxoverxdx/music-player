@@ -24,7 +24,7 @@ body,html{
     overflow: hidden;
     width: 500px;
     height: 673px;
-    max-height: calc(100% - 40px);
+    max-height: calc(100% - 45px);
 }
 .top{
     width: 100%;
@@ -242,6 +242,9 @@ body,html{
         transform: translateX(-50%);
         flex-direction: row-reverse;
         align-items: center;
+    }
+    body,html{
+        align-items: flex-start;
     }
     .rofl p{
         margin-bottom: 0;
