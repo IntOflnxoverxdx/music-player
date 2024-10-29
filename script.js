@@ -1,6 +1,7 @@
 rofl = false
 
 
+
 songs.forEach(song => {
     document.querySelector(".album-covers").innerHTML += `
     <img src="${song.cover}" alt="">
@@ -25,16 +26,19 @@ function setSong(autoplay = false){
         cover.style.left = `calc(${(i-currentSong)*100}% + 20px)`
     });
 
+    if (autoplay){
+        while (soundPlayer.paused){
+            soundPlayer.play()
+        }
+    }
     update(soundPlayer.currentTime)
-    setTimeout(() => {
-        if (autoplay){soundPlayer.play()}
-    }, 50);
 }
 
 
 function update(time){
     minutes = Math.floor(time/60)
     seconds = Math.floor(time%60).toString()
+    
     if (seconds.length < 2){
         seconds = "0"+seconds
     }
@@ -53,34 +57,23 @@ function update(time){
 
 
 function checkEnded(){
-    if (soundPlayer.currentTime >= songs[currentSong].length){
-        if (currentSong == songs.length-1){
-            currentSong = 0;
-        } 
-        else{
-            currentSong += 1
-        }
-        if (!soundPlayer.paused){
-            soundPlayer.pause()
-            setSong(true)
-        }else{
-            setSong()
-        }
-        soundPlayer.pause()
+    if (songs[currentSong].length-soundPlayer.currentTime<=0){
+        nextSong(true)
     }
 }
-function nextSong(){
+function nextSong(autoplay = false){
     if (currentSong == songs.length-1){
         currentSong = 0;
     } 
     else{
         currentSong += 1
     }
-    if (!pauseButton.classList.contains("paused")){
+    if (!soundPlayer.paused || autoplay){
         soundPlayer.pause()
         setTimeout(() => {
             setSong(true)
-        }, 50);
+        }, 150);
+            
     }else{
         setSong()
     }
@@ -93,21 +86,34 @@ function previousSong(){
     else{
         currentSong -= 1
     }
-    if (!pauseButton.classList.contains("paused")){
-        soundPlayer.pause()
-        setTimeout(() => {
-            setSong(true)
-        }, 50);
+    if (!soundPlayer.paused){
+        setSong(true)
     }else{
         setSong()
     }
-    soundPlayer.pause()
 }
 
+function template(bool=true){
+    seconds = (songs[currentSong].length%60).toString()
+    if (seconds.length < 2){
+        seconds = "0"+seconds
+    }
+    total_time = `${Math.floor(songs[currentSong].length/60)}:${seconds}`
 
-function nextControls(){    
-    document.querySelector(".bottom").innerHTML += `
-            <div class="controls c2" style="transform:translateX(120%);">
+
+    minutes = Math.floor(time/60)
+    seconds = Math.floor(time%60).toString()
+    if (seconds.length < 2){
+        seconds = "0"+seconds
+    }
+    if (soundPlayer.paused){
+        document.querySelector(".pause").classList.add("paused")
+    }else{
+        document.querySelector(".pause").classList.remove("paused")
+
+    }
+    return `
+            <div class="controls c2" style="transform:translateX(${!bool?-1*120:120}%);">
                 <div class="songname">${songs[currentSong].name}</div>
                 <div class="author">${songs[currentSong].author}</div>
                 <div class="timeline">
@@ -116,10 +122,10 @@ function nextControls(){
                         <div class="circle" style="left:${time/songs[currentSong].length*100}%"></div>
                     </div>
                     <div class="now-time">
-                        0:00
+                        ${minutes}:${seconds}
                     </div>
                     <div class="total-time">
-                        0:00
+                        ${total_time}
                     </div>
                 </div>
 
@@ -138,6 +144,10 @@ function nextControls(){
                 </div>
             </div>
     `
+}
+
+function nextControls(){    
+    document.querySelector(".bottom").innerHTML += template()
     setTimeout(() => {
         document.querySelector(".controls").style = "transition:.3s; transform:translate(-120%,0);"
         document.querySelector(".controls.c2").style = "transition:.3s; transform:translate(0,0);"
@@ -150,38 +160,7 @@ function nextControls(){
 }
 
 function previousControls(){    
-    document.querySelector(".bottom").innerHTML = `
-            <div class="controls c2" style="transform:translateX(-120%);">
-                <div class="songname">${songs[currentSong].name}</div>
-                <div class="author">${songs[currentSong].author}</div>
-                <div class="timeline">
-                    <div class="line">
-                        <div class="progress" style="width:${time/songs[currentSong].length*100}%"></div>
-                        <div class="circle" style="left:${time/songs[currentSong].length*100}%"></div>
-                    </div>
-                    <div class="now-time">
-                        0:00
-                    </div>
-                    <div class="total-time">
-                        0:00
-                    </div>
-                </div>
-
-                <div class="control-buttons">
-                    <div class="like button">
-    
-                    </div>
-                    <div class="song-controls">
-                        <div class="previous button"></div>
-                        <div class="pause button ${document.querySelector(".pause").classList.contains("paused")?"paused":""}"></div>
-                        <div class="next button"></div>
-                    </div>
-                    <div class="dislike button">
-    
-                    </div>
-                </div>
-            </div>
-    ` + document.querySelector(".bottom").innerHTML
+    document.querySelector(".bottom").innerHTML = template(false) + document.querySelector(".bottom").innerHTML
     
     setTimeout(() => {
         document.querySelectorAll(".controls")[1].style = "transition:.3s; transform:translate(120%,0);"
@@ -226,16 +205,18 @@ function setButtons(){
             previousControls()
         }
     }
+    
     timeline = document.querySelector(".timeline")
     timeline.addEventListener("click",(event)=>{
         time = Math.floor(event.offsetX/timeline.offsetWidth*songs[currentSong].length)
-        
         soundPlayer.currentTime = time
         update(time)
+    
+        
     })
     pauseButton = document.querySelector(".pause")
     pauseButton.onclick = ()=>{
-        if (pauseButton.classList.contains("paused")){
+        if (soundPlayer.paused){
             soundPlayer.play()
         }else{
             soundPlayer.pause() 
