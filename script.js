@@ -208,11 +208,13 @@ function setButtons(){
             nextSong()
         }
         else{
+            time = soundPlayer.currentTime
             nextControls()
         }
     }
     document.querySelector(".previous").onclick = ()=>{
         if (!rofl){
+            time = soundPlayer.currentTime
             previousSong()
         }
         else{
