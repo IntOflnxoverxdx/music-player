@@ -26,8 +26,9 @@ function setSong(autoplay = false){
     });
 
     update(soundPlayer.currentTime)
-
-    if (autoplay){soundPlayer.play()}
+    setTimeout(() => {
+        if (autoplay){soundPlayer.play()}
+    }, 50);
 }
 
 
@@ -59,11 +60,9 @@ function checkEnded(){
         else{
             currentSong += 1
         }
-        if (!pauseButton.classList.contains("paused")){
+        if (!soundPlayer.paused){
             soundPlayer.pause()
-            setTimeout(() => {
-                setSong(true)
-            }, 50);
+            setSong(true)
         }else{
             setSong()
         }
