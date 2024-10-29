@@ -1,0 +1,245 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+    color: white;
+}
+body{
+    width: 100%;
+    position: relative;
+    transition: .3s;
+    background-color: black;
+}
+
+
+body,html{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+.player-wrapper{
+    width: 500px;
+    height: 90%;
+}
+.top{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60%;
+}
+
+.album-covers{
+    height: 100%;
+    aspect-ratio: 1;
+    align-items: center;
+    display: flex;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+.album-covers img{
+    height: calc(100% - 40px);
+    transition: .3s;
+    position: absolute;
+    pointer-events: none;
+    border-radius: 10px;
+    aspect-ratio: 1;
+}
+
+.bottom{
+    overflow: hidden;
+    height: 40%;
+    position: relative;
+    padding: 20px;
+}
+.controls{
+    position: absolute;
+    width: calc(100% - 40px);
+}
+.songname{
+    font-size: 24px;
+    font-weight: bold;
+}
+.author{
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.816);
+}
+
+
+.timeline{
+    user-select: none;
+    display: flex;
+    cursor: pointer;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+}
+.line{
+    position: relative;
+    width: 100%;
+    border-radius: 4px;
+    margin-top: 15px;
+    height: 4px;
+    background-color: #ffffff81;
+}
+.progress{
+    width: 0;
+    height: 4px;    
+    border-radius: 4px;
+    background-color: #fff;
+}
+.circle{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 13px;
+    border-radius: 100%;
+    aspect-ratio: 1;
+    background-color: #fff;
+    transform: translate(-50%,-50%);
+}
+.now-time,.total-time{
+    margin-top: 10px;
+}
+
+
+
+.control-buttons{
+    filter: invert(92%) sepia(75%) saturate(0%) hue-rotate(58deg) brightness(104%) contrast(103%);
+    width: 100%;
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.dislike{
+    aspect-ratio: 1;
+    width: 30px;
+    background-image: url("../media/icons/dislike.png");
+    background-size: contain;
+}
+.like{
+    aspect-ratio: 1;
+    width: 30px;
+    background-image: url("../media/icons/like.png");
+    background-size: contain;
+}
+.song-controls{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+.previous{
+    aspect-ratio: 1;
+    width: 40px;
+    background-image: url("../media/icons/back.png");
+    background-size: contain;
+}
+.next{
+    aspect-ratio: 1;
+    width: 40px;
+    background-image: url("../media/icons/next.png");
+    background-size: contain;
+}
+.pause{
+    aspect-ratio: 1;
+    width: 60px;
+    background-image: url("../media/icons/pause.png");
+    background-size: contain;
+}
+.paused{
+    background-image: url("../media/icons/play.png");
+    
+}
+
+.button{
+    cursor: pointer;
+    transition: .3s;
+}
+.button:hover{
+    scale: 1.1;
+}
+.button:active{
+    scale: .9;
+}
+
+.rofl{
+    top: 10px;
+    left: 10px;
+    width: fit-content;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+}
+.rofl p{
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+.toggler-wrapper {
+    display: block;
+    width: 45px;
+    height: 25px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .toggler-wrapper input[type="checkbox"] {
+    display: none;
+  }
+  
+  .toggler-wrapper input[type="checkbox"]:checked+.toggler-slider {
+    background-color: #44cc66;
+  }
+  
+  .toggler-wrapper .toggler-slider {
+    background-color: #ff7070;
+    position: absolute;
+    border-radius: 100px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-transition: all 300ms ease;
+    transition: all 300ms ease;
+  }
+  
+  .toggler-wrapper .toggler-circle {
+    position: absolute;
+    -webkit-transition: all 300ms ease;
+    transition: all 300ms ease;
+  }
+.toggler-wrapper.style-1 input[type="checkbox"]:checked+.toggler-slider .toggler-circle {
+    left: calc(100% - 19px - 3px);
+  }
+  
+  .toggler-wrapper.style-1 .toggler-circle {
+    width: calc(25px - 6px);
+    height: calc(25px - 6px);
+    border-radius: 50%;
+    left: 3px;
+    top: 3px;
+    background-color: #fff;
+  }
+
+
+@media screen and (max-width:500px) {
+    .rofl{
+        flex-direction: row-reverse;
+        align-items: center;
+    }
+    .rofl p{
+        margin-bottom: 0;
+        margin-right: 10px;
+    }
+    .top{
+        height: 40%;
+    }
+    .song-controls{
+        width: 70%;
+    }
+}
