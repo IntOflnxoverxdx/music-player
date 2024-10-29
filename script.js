@@ -85,10 +85,14 @@ function previousSong(autoplay = false){
         currentSong -= 1
     }
     if (!soundPlayer.paused || autoplay){
-        setSong(true)
+        soundPlayer.pause()
+        setTimeout(() => {
+            setSong(true)
+        }, 150);
     }else{
         setSong()
     }
+    soundPlayer.pause()
 }
 
 function template(bool=true){
