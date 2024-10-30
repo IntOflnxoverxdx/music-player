@@ -1,10 +1,6 @@
 rofl = false
 
-songs.forEach(song => {
-    document.querySelector(".album-covers").innerHTML += `
-    <img src="${song.cover}" alt="">
-    `
-});
+
 
 
 currentSong = 0
@@ -19,11 +15,6 @@ function setSong(autoplay = false){
     document.querySelector("body").style = `background-color:${songs[currentSong].color};`
     document.querySelector(".songname").innerHTML = songs[currentSong].name
     document.querySelector(".author").innerHTML = songs[currentSong].author
-    
-    document.querySelectorAll(".album-covers img").forEach((cover,i) => {
-        cover.style.left = `calc(${(i-currentSong)*100}% + 20px)`
-    });
-
     if (autoplay){
         while (soundPlayer.paused){
             soundPlayer.play()
@@ -60,39 +51,91 @@ function checkEnded(){
     }
 }
 function nextSong(autoplay = false){
-    if (currentSong == songs.length-1){
-        currentSong = 0;
-    } 
-    else{
-        currentSong += 1
-    }
-    if (!soundPlayer.paused || autoplay){
-        soundPlayer.pause()
+    if (can_switch){
+        can_switch = false
+
+        
+        if (currentSong == songs.length-1){
+            currentSong = 0;
+        } 
+        else{
+            currentSong += 1
+        }
+        document.querySelector(".album-covers").innerHTML += `
+            <img src="${songs[currentSong].cover}" alt="" class="cover2" style="transform:translateX(100%);transition:.3s;">
+        `
+
         setTimeout(() => {
-            setSong(true)
-        }, 150);
-            
-    }else{
-        setSong()
+            document.querySelector(".album-covers img").style = "transform:translate(calc(-100% - 40px),0);"
+            document.querySelector(".album-covers img.cover2").style = "transform:translate(0,0);"
+        }, 1);
+        setTimeout(() => {
+            document.querySelector(".album-covers img.cover2").style = "transition:0;"
+            document.querySelector(".album-covers img.cover2").classList.remove("cover2")
+            document.querySelector(".album-covers img").classList.add("toremove")
+            document.querySelector(".album-covers img.toremove").remove()
+
+
+            can_switch = true
+        }, 300);
+
+        if (!soundPlayer.paused || autoplay){
+            soundPlayer.pause()
+            setTimeout(() => {
+                setSong(true)
+            }, 150);
+
+        }else{
+            setSong()
+        }
+        soundPlayer.pause()
     }
-    soundPlayer.pause()
 }
 function previousSong(autoplay = false){
-    if (currentSong == 0){
-        currentSong = songs.length-1;
-    } 
-    else{
-        currentSong -= 1
-    }
-    if (!soundPlayer.paused || autoplay){
-        soundPlayer.pause()
+    if (can_switch){
+        can_switch = false
+
+        if (currentSong == 0){
+            currentSong = songs.length-1;
+        } 
+        else{
+            currentSong -= 1
+        }
+
+        document.querySelector(".album-covers").innerHTML = `
+            <img src="${songs[currentSong].cover}" alt="" class="cover2" style="transform:translateX(-100%); transition:.3s;">
+        `+document.querySelector(".album-covers").innerHTML
+
         setTimeout(() => {
-            setSong(true)
-        }, 150);
-    }else{
-        setSong()
+            document.querySelectorAll(".album-covers img")[1].style = "transform:translate(calc(100% + 40px),0);"
+            document.querySelector(".album-covers img.cover2").style = "transform:translate(0,0);"
+        }, 1);
+        setTimeout(() => {
+            document.querySelector(".album-covers img.cover2").style = "transition:0;"
+            document.querySelector(".album-covers img.cover2").classList.remove("cover2")
+            document.querySelectorAll(".album-covers img")[1].classList.add("toremove")
+            document.querySelector(".album-covers img.toremove").remove()
+
+
+            can_switch = true
+        }, 300);
+
+
+
+
+
+
+        if (!soundPlayer.paused || autoplay){
+            soundPlayer.pause()
+            setTimeout(() => {
+                setSong(true)
+            }, 150);
+        }else{
+            setSong()
+        }
+        soundPlayer.pause()
     }
-    soundPlayer.pause()
+    
 }
 
 function template(bool=true){
@@ -175,6 +218,7 @@ function previousControls(){
     }, 300);
 }
 
+can_switch = true
 
 setInterval(() => {
     update(soundPlayer.currentTime)
@@ -189,6 +233,7 @@ let time = 0
 
 
 function setButtons(){
+    document.querySelector(".album-covers").innerHTML = `<img src="${songs[currentSong].cover}" alt="">`
     document.querySelector(".next").onclick = ()=>{
         if (!rofl){
             nextSong()
@@ -238,33 +283,20 @@ document.querySelector(".rofl").onclick = ()=>{
 }
 
 
-can_switch = true
 document.querySelector("body").addEventListener("keypress",(event)=>{
-    if (can_switch){
-        if (event.key == " " || event.key == "k"){
-            if (soundPlayer.paused){
-                soundPlayer.play()
-            }else{
-                soundPlayer.pause() 
-            }
-            update(soundPlayer.currentTime)
+    if (event.key == " " || event.key == "k"){
+        if (soundPlayer.paused){
+            soundPlayer.play()
+        }else{
+            soundPlayer.pause() 
         }
-        else if (event.key == "l"){
-            can_switch = false
-            setTimeout(() => {
-                can_switch = true
-            }, 300);
-            soundPlayer.pause()
-            nextSong(true)
-        }
-        else if (event.key == "j"){
-            can_switch = false
-            setTimeout(() => {
-                can_switch = true
-            }, 300);
-            soundPlayer.pause()
-            previousSong(true)
-        }
+        update(soundPlayer.currentTime)
+    }
+    else if (event.key == "l"){
+        nextSong()
+    }
+    else if (event.key == "j"){
+        previousSong()
     }
 })
 
