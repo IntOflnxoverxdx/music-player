@@ -1,7 +1,24 @@
 rofl = false
 
 
-
+function shadeColor(color, percent) {
+    var R = parseInt(color.substring(1,3),16);
+    var G = parseInt(color.substring(3,5),16);
+    var B = parseInt(color.substring(5,7),16);
+    R = parseInt(R * (100 + percent) / 100);
+    G = parseInt(G * (100 + percent) / 100);
+    B = parseInt(B * (100 + percent) / 100);
+    R = (R<255)?R:255;
+    G = (G<255)?G:255;
+    B = (B<255)?B:255;
+    R = Math.round(R)
+    G = Math.round(G)
+    B = Math.round(B)
+    var RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
+    var GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
+    var BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
+    return "#"+RR+GG+BB;
+}
 
 currentSong = 0
 function setSong(autoplay = false){
@@ -13,6 +30,7 @@ function setSong(autoplay = false){
     soundPlayer = new Audio(songs[currentSong].file)
     document.querySelector(".now-time").innerHTML = `0:00`
     document.querySelector("body").style = `background-color:${songs[currentSong].color};`
+    document.querySelector(".songs-list").style = `background-color:${songs[currentSong].color};`
     document.querySelector(".songname").innerHTML = songs[currentSong].name
     document.querySelector(".author").innerHTML = songs[currentSong].author
     if (autoplay){
@@ -20,6 +38,48 @@ function setSong(autoplay = false){
             soundPlayer.play()
         }
     }
+    document.querySelector(".songs-list").innerHTML = ""
+    songs.forEach(song => {
+        seconds = (song.length%60).toString()
+        if (seconds.length < 2){
+            seconds = "0"+seconds
+        }
+        document.querySelector(".songs-list").innerHTML+=`
+        <div class="list__song">
+                <img src="${song.cover}" alt="">
+                <div class="list__song__info">
+                    <div class="song__title">
+                        ${song.name}
+                    </div>
+                    <div class="song__author">
+                        ${song.author}
+                    </div>
+                </div>
+                <div class="list__song__length">
+                    ${Math.floor(song.length/60)}:${seconds}
+                </div>
+            </div>
+        `
+        document.querySelectorAll(".list__song").forEach((song,index) => {
+            song.onclick = ()=>{
+                soundPlayer.pause()
+                currentSong = index
+                setSong(true)
+                document.querySelector(".album-covers img").src = songs[currentSong].cover
+            }
+        });
+        document.querySelectorAll(".list__song").forEach((element,i) => {
+                    
+            element.classList.remove("active")
+            console.log(element);
+            
+            if (i == currentSong){
+                element.classList.add("active")
+            }
+        });
+    });
+
+
     update(soundPlayer.currentTime)
 }
 
@@ -233,6 +293,9 @@ let time = 0
 
 
 function setButtons(){
+    
+
+
     document.querySelector(".album-covers").innerHTML = `<img src="${songs[currentSong].cover}" alt="">`
     document.querySelector(".next").onclick = ()=>{
         if (!rofl){
@@ -301,3 +364,11 @@ document.querySelector("body").addEventListener("keypress",(event)=>{
 })
 
 setButtons()
+
+document.querySelector(".list").onclick = ()=>{
+        if (!document.querySelector(".songs-list").classList.contains("closed")){
+            document.querySelector(".songs-list").classList.add("closed")
+        }else{
+            document.querySelector(".songs-list").classList.remove("closed")
+        }
+}
