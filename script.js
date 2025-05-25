@@ -326,12 +326,20 @@ function setButtons(){
     })
     pauseButton = document.querySelector(".pause")
     pauseButton.onclick = ()=>{
-        if (soundPlayer.paused){
-            soundPlayer.play()
-        }else{
-            soundPlayer.pause() 
+        if (!rofl) {
+            if (soundPlayer.paused) {
+                soundPlayer.play()
+            } else {
+                soundPlayer.pause()
+            }
+            pauseButton.classList.toggle("paused")
+        } else {
+            document.querySelector("body").classList.add("roll")
+            setTimeout(() => {
+                document.querySelector("body").classList.remove("roll")
+
+            }, 1000);
         }
-        pauseButton.classList.toggle("paused")
     }
 }
 
